@@ -1,0 +1,53 @@
+body {
+	font-family: "Computer Modern Serif";
+	font-size: 130%;
+}
+
+#image {
+	width: 450px;
+	float: left;
+	margin-right: 1em;
+}
+
+#image div {
+	width: 50%;
+	border-bottom: 2px solid #000;
+	text-align: center;
+	padding-bottom: 0.2em;
+	margin-bottom: 0.4em;
+	margin-left: 1px;
+}
+
+#image canvas {
+	border: 1px solid #000;
+}
+
+table {
+	margin-top: 3em;
+	line-height: 1.5;
+}
+
+th {
+	padding-top: 1em;
+}
+
+td strong {
+	font-weight: normal;
+	background-color: #eee;
+	padding: 5px;
+}
+
+.no::before {
+	content: "✗";
+	color: #f00;
+}
+
+.yes::before {
+	content: "✓";
+	color: #0f0;
+}
+
+footer {
+	clear: both;
+	padding-top: 1em;
+}

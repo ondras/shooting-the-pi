@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Shooting the π</title>
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="font/cmserif.css" />
+	</head>
+	<body>
+		<h1>Shooting the π</h1>
+		
+		<section id="image">
+			<div>r</div>
+			<canvas width="450" height="450"></canvas>
+		</section>
+		
+		<table>
+			<tr>
+				<th>Square</th>
+				<th>Circle</th>
+			</tr>
+			<tr>
+				<td>A<sub>□</sub> = 4 r<sup>2</sup></td>
+				<td>A<sub>○</sub> = π r<sup>2</sup></td>
+			</tr>
+			<tr>
+				<td colspan="2">Therefore, <strong>π = 4 A<sub>○</sub> / A<sub>□</sub></strong></td>
+			</tr>
+			<tr>
+				<th>Shots</th>
+				<th>Hits</th>
+			</tr>
+			<tr>
+				<td id="shots"></td>
+				<td id="hits"></td>
+			</tr>
+			<tr>
+				<td colspan="2">π ≅ <span id="pi"></span></td>
+			</tr>
+			<tr>
+				<th colspan="2">Miscellaneous</th>
+			</tr>
+			<tr>
+				<td>Speed</td>
+				<td><input type="range" value="100" min="10" max="1000" /></td>
+			</tr>
+			<tr>
+				<td>Error</td>
+				<td id="error"></td>
+			</tr>
+			<tr>
+				<td>Better than 3.14?</td>
+				<td id="diff1"></td>
+			</tr>
+			<tr>
+				<td>Better than 22/7?</td>
+				<td id="diff2"></td>
+			</tr>
+		</table>
+		
+		<footer>
+			Approximating π using the <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo method</a>: slow and inefficient, but interesting and highly suitable for the <a href="https://en.wikipedia.org/wiki/Pi_Day">Pi Day</a> anyway. Created by <a href="http://ondras.zarovi.cz/">Ondřej Žára</a> in 2016.
+		</footer>
+		
+		<script>
+			var shots = 0;
+			var hits = 0;
+			var ctx = document.querySelector("canvas").getContext("2d");
+			var const1 = 3.14;
+			var const2 = 22/7;
+			
+			function shoot() {
+				var x = Math.random();
+				var y = Math.random();
+				shots++;
+				if (Math.pow(x-.5, 2) + Math.pow(y-.5, 2) < .25) { 
+					hits++;
+					ctx.fillStyle = "red";
+				} else {
+					ctx.fillStyle = "gray";
+				}
+				
+				x *= ctx.canvas.width;
+				y *= ctx.canvas.height;
+				ctx.fillRect(x, y, 1, 1);
+			}
+
+			function batch() {
+				setTimeout(batch, 0);
+				var count = parseInt(document.querySelector("input").value);
+				for (var i=0;i<count;i++) { shoot(); }
+				var pi = 4*hits/shots;
+				var error = Math.abs(pi-Math.PI);
+
+				document.querySelector("#shots").innerHTML = shots;
+				document.querySelector("#hits").innerHTML = hits;
+				document.querySelector("#pi").innerHTML = pi.toFixed(10);
+				
+				document.querySelector("#error").innerHTML = error.toFixed(10);
+				
+				document.querySelector("#diff1").className = (Math.abs(const1-Math.PI) < error ? "no" : "yes");
+				document.querySelector("#diff2").className = (Math.abs(const2-Math.PI) < error ? "no" : "yes");
+				
+			}
+			
+			var bg = new Image();
+			bg.src = "pie.png";
+			bg.onload = function() {
+				ctx.drawImage(bg, 0, 0, ctx.canvas.width, ctx.canvas.height);
+				ctx.globalAlpha = 0.2;
+				batch();
+			}
+		</script>
+	</body>
+</html>
